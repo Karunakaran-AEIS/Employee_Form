@@ -15,6 +15,7 @@ namespace Task5
 
         public void OpenExcel(string filePath)
         {
+            //..
             excelApp = new Excel.Application();
             try
             {
