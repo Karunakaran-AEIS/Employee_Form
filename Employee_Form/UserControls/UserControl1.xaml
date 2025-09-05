@@ -3,7 +3,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Employee_Form.UserControls"
+             xmlns:local="clr-namespace:Employee_Form"
+             xmlns:FC="clr-namespace:Employee_Form.HelperClass" 
+             xmlns:viewmodel="clr-namespace:Employee_Form.ViewModel" 
+             d:DataContext="{d:DesignInstance Type=viewmodel:VM_EmployeeDetials}"
              mc:Ignorable="d" x:Name="root"
              d:DesignHeight="75" d:DesignWidth="500">
     <Grid>
@@ -17,7 +20,12 @@
         </Grid>
 
         <Grid Grid.Column="1">
-            <TextBox Text="{Binding txtContent,ElementName=root,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Padding="5"  FontSize="20" Height="60" Width="320" Margin="0 8 8 8" HorizontalContentAlignment="Left" VerticalContentAlignment="Center"/>
+            <TextBox x:Name="InnerTextBox"  PreviewKeyDown="InputBox_PreviewKeyDown" 
+                     local:FocusExtension.IsFocused="{Binding IsFocused,Mode=TwoWay}"  
+                     Text="{Binding txtContent,ElementName=root,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
+                     Padding="5"  FontSize="20" Height="55" Width="320" Margin="0 8 8 8" 
+                     IsReadOnly="{Binding Read,ElementName=root,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                     HorizontalContentAlignment="Left" VerticalContentAlignment="Center"/>
         </Grid>
     </Grid>
 </UserControl>

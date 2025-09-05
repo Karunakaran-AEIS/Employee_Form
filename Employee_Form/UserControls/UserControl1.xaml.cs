@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
+using Employee_Form.HelperClass;
 
 namespace Employee_Form.UserControls
 {
@@ -33,6 +35,64 @@ namespace Employee_Form.UserControls
         public static readonly DependencyProperty lblContentProperty =
             DependencyProperty.Register("lblContent", typeof(string), typeof(UserControl1), new PropertyMetadata(""));
 
+        public static readonly DependencyProperty EnterKeyCommandProperty =
+       DependencyProperty.Register(
+           "EnterKeyCommand",
+           typeof(ICommand),
+           typeof(UserControl1),
+           new PropertyMetadata(null));
+
+        public ICommand EnterKeyCommand
+        {
+            get => (ICommand)GetValue(EnterKeyCommandProperty);
+            set => SetValue(EnterKeyCommandProperty, value);
+        }
+
+        private void InputBox_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter && EnterKeyCommand?.CanExecute(null) == true)
+            {
+                EnterKeyCommand.Execute(null);
+                e.Handled = true;
+            }
+        }
+
+        public bool IsFocused     
+        {
+            get => (bool)GetValue(IsFocusedProperty);
+            set => SetValue(IsFocusedProperty, value);
+        }
+
+        public static readonly DependencyProperty IsFocusedProperty =
+            DependencyProperty.Register(
+                "IsFocused",
+                typeof(bool),
+                typeof(UserControl1),
+                new PropertyMetadata(false, OnIsFocusedChanged));
+
+        private static void OnIsFocusedChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is UserControl1 control && (bool)e.NewValue)
+            {
+                control.Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    control.InnerTextBox.Focus();          // Ensure this TextBox is named in XAML
+                    Keyboard.Focus(control.InnerTextBox);  // This makes the caret appear
+                }), DispatcherPriority.Render);
+            }
+        }
+
+
+
+        public bool Read
+        {
+            get { return (bool)GetValue(ReadProperty); }
+            set { SetValue(ReadProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for Read.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty ReadProperty =
+            DependencyProperty.Register("Read", typeof(bool), typeof(UserControl1), new PropertyMetadata(false));
 
 
 

@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 using System.Windows;
 using Excel = Microsoft.Office.Interop.Excel;
 
-namespace Task5
+namespace Employee_Form.HelperClass
 {
     public class ExcelHelp
     {
@@ -39,6 +39,7 @@ namespace Task5
         {
             Excel.Range rangeToMerge = worksheet.Range["A1:C1"];
             rangeToMerge.Merge();
+            
             rangeToMerge.WrapText = true;
             rangeToMerge.Value = "Ataritech Effective Industrial Solutions (OPC) Pvt Ltd\n49/1 8 th Cross Venkatapura Koramangala Bangalore, Karnataka, 560034, India " +
                                  "\nWorks: No.20, Shantipura main road, Electronic city phase 2, Bangalore, KA, 560100";

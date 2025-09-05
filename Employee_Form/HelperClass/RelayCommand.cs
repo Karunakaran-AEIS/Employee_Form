@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace Collins_based_Application_Using_MVVM
+namespace Employee_Form.HelperClass
 {
     public class RelayCommand : ICommand
     {
