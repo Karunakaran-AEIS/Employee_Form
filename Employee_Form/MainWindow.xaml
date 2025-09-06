@@ -172,37 +172,19 @@
 
                             </Grid>
                             <Grid >
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="1*"/>
-                                    <ColumnDefinition Width="2*"/>
-                                </Grid.ColumnDefinitions>
 
-                                <Grid Grid.Column="0">
-                                    <Label Content="Relation :" HorizontalAlignment="Right" Margin="5" FontSize="25" 
-                                           Height="70" Width="160" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" 
-                                           VerticalAlignment="Center"/>
-                                </Grid>
-
-                                <Grid Grid.Column="1">
-                                    <ComboBox Height="60" SelectedItem="{Binding NomRel,Mode=TwoWay}" SelectedValuePath="Content"
-                                              local:FocusExtension.IsFocused="{Binding FocNomRel}" SelectedIndex="{Binding Cmbindex,Mode=TwoWay}" FontSize="25" IsEnabled="{Binding ReadNomRel,Mode=TwoWay}"
-                                              Width="320" Margin="0 8 8 8" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
-                                        <ComboBoxItem Content=""/>
-                                        <ComboBoxItem Content="Father"/>
-                                        <ComboBoxItem Content="Mother"/>
-                                        <ComboBoxItem Content="Husband"/>
-                                        <ComboBoxItem Content="Wife"/>
-                                        <ComboBoxItem Content="Brother"/>
-                                        <ComboBoxItem Content="Sister"/>
-                                        <ComboBoxItem Content="Son"/>
-                                        <ComboBoxItem Content="Daughter"/>
-                                        <ComboBoxItem Content="Gardian"/>
-                                    </ComboBox>
-                                </Grid>
+                                <UC:UserControl1 lblContent="Relation :" 
+                                                 IsFocused="{Binding FocNomRel,Mode=TwoWay}" 
+                                                 Read="{Binding ReadNomRel,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                                 EnterKeyCommand="{Binding EntNomRel}"  
+                                                 txtContent="{Binding NomRel,Mode=TwoWay}"
+                                                 />
                             </Grid>
 
                             <Grid>
-                                <UC:UserControl1 lblContent="Phone No:" IsFocused="{Binding FocNomPhoneNum}" Read="{Binding ReadNomPhoneNum,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                <UC:UserControl1 lblContent="Phone No:" 
+                                                 IsFocused="{Binding FocNomPhoneNum,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
+                                                 Read="{Binding ReadNomPhoneNum,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                                                  EnterKeyCommand="{Binding EntNomPhoneNum,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                                                  txtContent="{Binding NomPhoneNum,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
                             </Grid>

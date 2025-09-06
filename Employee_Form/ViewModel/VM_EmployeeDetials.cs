@@ -24,7 +24,7 @@ namespace Employee_Form.ViewModel
         string filePath;
         bool nullvalue;
         string nullvaluename;
-        Regex RegName , RegDob, RegEmail, RegPhoneNum, RegAddress, RegAge, RegBloodGroup;
+        Regex RegName , RegDob, RegEmail, RegPhoneNum, RegAddress, RegAge, RegBloodGroup,RegRelation;
         public VM_EmployeeDetials() {
 
 
@@ -32,6 +32,11 @@ namespace Employee_Form.ViewModel
             RegexCreator();
             ReadOnly();
             FocusRemover();
+            FocNomPhoneNum = false;
+            ReadNomPhoneNum = true;
+            Focname = true;
+
+            
         }
         public void GetValue()
         {
@@ -131,6 +136,7 @@ namespace Employee_Form.ViewModel
             EntLocAddress = new RelayCommand(EnterLocAddress);
             EntNomName = new RelayCommand(EnterNomName);
             EntNomDob = new RelayCommand(EnterNomDob);
+
             EntNomRel = new RelayCommand(EnterNomRel);
             EntNomPhoneNum = new RelayCommand(EnterNomPhoneNum);
             EntNomAddress = new RelayCommand(EnterNomAddress);
@@ -150,6 +156,7 @@ namespace Employee_Form.ViewModel
             RegAddress = new Regex("^[a-zA-Z0-9 ,.-/]+$");
             RegAge = new Regex("^(1[89]|[2-9][0-9])$");
             RegBloodGroup = new Regex("^(A|B|AB|O)[+-]$");
+            RegRelation = new Regex("^(Father|Mother|Husband|Wife|Son|Daughter|Guardian)$");
         }
 
         private void Generate()
@@ -274,7 +281,7 @@ namespace Employee_Form.ViewModel
             ReadFatherName = true;
             ReadBloodgrp = true;
             ReadNomName = true;
-            ReadNomRel = false;
+            ReadNomRel = true;
             ReadNomPhoneNum = true;
             ReadNomAddress = true;
             ReadAge = true;
@@ -296,7 +303,7 @@ namespace Employee_Form.ViewModel
             ReadFatherName = false;
             ReadBloodgrp = false;
             ReadNomName = false;
-            ReadNomRel = true;
+            ReadNomRel = false;
             ReadNomPhoneNum = false;
             ReadNomAddress = false;
             ReadAge = false;
@@ -407,7 +414,7 @@ namespace Employee_Form.ViewModel
         }
         private void EnterNomRel()
         {
-            if (NomRel == null)
+            if (RegRelation.IsMatch(NomRel))
             {
                 FocusRemover();
                 ReadNomPhoneNum = false;
@@ -415,7 +422,7 @@ namespace Employee_Form.ViewModel
             }
             else
             {
-                MessageBox.Show("Please select a Relation", "Invalid Relation", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("Please Enter a Relation in this Format Father | Mother | Husband | Wife | Son | Daughter | Guardian", "Invalid Relation", MessageBoxButton.OK, MessageBoxImage.Warning);
                 FocusRemover();
                 FocNomPhoneNum = true;
             }
@@ -1019,20 +1026,8 @@ namespace Employee_Form.ViewModel
         {
             get { return nomRel; }
             set {
-                FocNomPhoneNum = false;
-                if (value == null){
                     nomRel = value;
-                    OnPropertyChanged();
-                }
-                else
-                {
-                    FocusRemover();
-                    nomRel = value;
-                    ReadNomPhoneNum = false;
-                    FocNomPhoneNum = true;
-                    OnPropertyChanged();
-                }
-                    
+                OnPropertyChanged();      
             }
         }
         
@@ -1117,15 +1112,19 @@ namespace Employee_Form.ViewModel
                     if (DateTime.TryParse(value, out DateTime dt))
                     {
                         nomDob = dt.ToShortDateString();
+                        ReadNomRel = false;
+                        FocNomRel = true;
+                        OnPropertyChanged();
                     }
                     else
                     {
                         nomDob = value;
+                        ReadNomRel = false;
+                        FocNomRel = true;
+                        OnPropertyChanged();
                     }
 
-                    ReadNomRel = true;
-                    FocNomRel = true;
-                    OnPropertyChanged();
+                    
                 }
 
             }
@@ -1171,6 +1170,7 @@ namespace Employee_Form.ViewModel
 
 
         // --------------- Button ICommand Property ------------- //
+        
         public ICommand EntPerPhone { get; set; }
         public ICommand EntAltPhone { get; set; }
         public ICommand EntFatherName { get; set; }
