@@ -1,38 +1,32 @@
 ﻿using System;
 using System.IO;
 using System.Linq.Expressions;
-using System.Net.Sockets;
 using System.Runtime.InteropServices;
 using System.Windows;
-using System.Windows.Media;
-using Microsoft.Office.Interop.Excel;
 using Excel = Microsoft.Office.Interop.Excel;
 
-namespace Employee_Form.HelperClass
+namespace Task5
 {
     public class ExcelHelp
     {
         private Excel.Application excelApp;
         private Excel.Workbook workbook;
         private Excel.Worksheet worksheet;
-        public string Name, AgeDob,Age,DOB, PerAdd, PreNO, AltNo, Fathername, Bloodgroup, EmailID, LocDet, EmrPhone,LocName,LocPhone, LocAdd, NomDetial,NomName,NomDob,NomRel,NomPhone,NomAddress;
-        public bool IsFileExist;
+
         public void OpenExcel(string filePath)
         {
+            //..chnage
             excelApp = new Excel.Application();
             try
             {
-                IsFileExist=false;
                 if (!File.Exists(filePath))
                 {
                     workbook = excelApp.Workbooks.Add();
                     workbook.SaveAs(filePath);
-                    IsFileExist = false;
                 }
                 else
                 {
-                    IsFileExist = true;
-                    workbook = excelApp.Workbooks.Open(filePath, ReadOnly: false);
+                     workbook = excelApp.Workbooks.Open(filePath, ReadOnly: false);
                 }
                 worksheet = workbook.Sheets[1];
             }
@@ -45,7 +39,6 @@ namespace Employee_Form.HelperClass
         {
             Excel.Range rangeToMerge = worksheet.Range["A1:C1"];
             rangeToMerge.Merge();
-            
             rangeToMerge.WrapText = true;
             rangeToMerge.Value = "Ataritech Effective Industrial Solutions (OPC) Pvt Ltd\n49/1 8 th Cross Venkatapura Koramangala Bangalore, Karnataka, 560034, India " +
                                  "\nWorks: No.20, Shantipura main road, Electronic city phase 2, Bangalore, KA, 560100";
@@ -108,52 +101,6 @@ namespace Employee_Form.HelperClass
             workbook.Save();
         }
 
-        public void GetData()
-        {
-            
-             Name = ReadCellValue(2, 3);
-             AgeDob = ReadCellValue(3, 3);
-             string[] AgDob = AgeDob.Split(new[] { "&" }, StringSplitOptions.RemoveEmptyEntries);
-
-             Age = AgDob.Length > 0 ? AgDob[0] : string.Empty;
-             DOB =AgDob.Length > 1 ? AgDob[1] : string.Empty;
-
-
-             PerAdd = ReadCellValue(4, 3);
-             PreNO = ReadCellValue(5, 3);
-             AltNo = ReadCellValue(6, 3);
-             Fathername = ReadCellValue(7, 3);
-             Bloodgroup = ReadCellValue(8, 3);
-             EmailID = ReadCellValue(9, 3);
-             LocDet = ReadCellValue(10, 3);
-
-            string[] LDet = LocDet.Split(new[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries);
-
-            LocName = LDet.Length > 0 ? LDet[0] : string.Empty;
-            LocPhone = LDet.Length > 1 ? LDet[1] : string.Empty;
-
-            EmrPhone = ReadCellValue(11, 3);
-             LocAdd = ReadCellValue(12, 3);
-             NomDetial = ReadCellValue(13, 3);
-            string[] NDet = NomDetial.Split(new[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries);
-
-            NomName = NDet.Length >0? NDet[0] : string.Empty;
-            NomDob = NDet.Length > 1 ? NDet[1] : string.Empty;
-            NomRel = NDet.Length > 2 ? NDet[2] : string.Empty;
-            NomPhone = NDet.Length > 3 ? NDet[3] : string.Empty;
-            NomAddress = NDet.Length > 4 ? NDet[4] : string.Empty;
-
-        }
-
-
-        public string ReadCellValue(int row, int column)
-        {
-            if (worksheet == null)
-                throw new Exception("Excel file is not open. Call OpenExcel() first.");
-
-            Excel.Range cell = worksheet.Cells[row, column];
-            return cell?.Value?.ToString() ?? string.Empty;
-        }
 
         public void Footer()
         {

@@ -12,6 +12,9 @@ using System.Windows.Input;
 using System.Data;
 using Employee_Form.HelperClass;
 using System.Text.RegularExpressions;
+using System.Net.Sockets;
+using System.Windows.Media;
+using Microsoft.Reporting.Map.WebForms.BingMaps;
 
 namespace Employee_Form.ViewModel
 {
@@ -24,19 +27,98 @@ namespace Employee_Form.ViewModel
         Regex RegName , RegDob, RegEmail, RegPhoneNum, RegAddress, RegAge, RegBloodGroup;
         public VM_EmployeeDetials() {
 
+
             Binding_Buton_Command();
             RegexCreator();
             ReadOnly();
+            FocusRemover();
+        }
+        public void GetValue()
+        {
+            excelHelp = new ExcelHelp();
+            filePath = @"C:\Users\AEIS LAPTOP Abhay\Downloads\Employee_Form\Employee_Form\ExcelFiles\" + Name.Trim() + ".xlsx";
+            excelHelp.OpenExcel(filePath);
+            if (excelHelp.IsFileExist) {
 
-        
+                excelHelp.GetData();
+                Name = excelHelp.Name;
+                Age = excelHelp.Age;
+                Empdob = excelHelp.DOB;
+                PerAddress = excelHelp.PerAdd;
+                PerPhone = excelHelp.PreNO;
+                AltPhone = excelHelp.AltNo;
+                Fathername = excelHelp.Fathername;
+                Bloodgrp = excelHelp.Bloodgroup;
+                EmailID = excelHelp.EmailID;
+                LocName = excelHelp.LocName;
+                LocNum = excelHelp.LocPhone;
+                EmrPhoneNum = excelHelp.EmrPhone;
+                LocAddress = excelHelp.LocAdd;
+                NomName = excelHelp.NomName;
+                NomDob = excelHelp.NomDob;
+                NomRel = excelHelp.NomRel;
+
+                if(NomRel == "Father")
+                {
+                    Cmbindex = 1;
+                }
+                if(NomRel == "Mother")
+                {
+                    Cmbindex = 2;
+                }
+                if(NomRel == "Husband")
+                {
+                    Cmbindex = 3;
+                }
+                if(NomRel == "Wife")
+                {
+                    Cmbindex = 4;
+                }
+                if(NomRel == "Brother")
+                {
+                    Cmbindex = 5;
+                }
+                if(NomRel == "Sister")
+                {
+                    Cmbindex = 6;
+                }if(NomRel == "Son")
+                {
+                    Cmbindex = 7;
+                }if(NomRel == "Daughter")
+                {
+                    Cmbindex = 8;
+                }if(NomRel == "Gardian")
+                {
+                    Cmbindex = 9;
+                }
+
+                NomPhoneNum = excelHelp.NomPhone;
+                NomAddress = excelHelp.NomAddress;
+
+                MessageBoxResult rs =MessageBox.Show("Do You Want to edit","Update Or Not",MessageBoxButton.YesNo,MessageBoxImage.Information);
+
+                if (rs == MessageBoxResult.Yes)
+                {
+                    ReadOnly();
+                    ChangeReadOnly();
+                }
+
+                excelHelp.SaveAndClose(filePath);
+
+
+            }
+            else
+            {
+                MessageBox.Show("File does not exist");
+                excelHelp.SaveAndClose(filePath);
+            }
             
-            
-           
-        
+
         }
 
         public void Binding_Buton_Command()
         {
+            
             Reset = new RelayCommand(EmptyField);
             PrintCommand = new RelayCommand(Generate);
             EntPerPhone = new RelayCommand(EnterPerphone);
@@ -51,271 +133,52 @@ namespace Employee_Form.ViewModel
             EntNomDob = new RelayCommand(EnterNomDob);
             EntNomRel = new RelayCommand(EnterNomRel);
             EntNomPhoneNum = new RelayCommand(EnterNomPhoneNum);
+            EntNomAddress = new RelayCommand(EnterNomAddress);
             EntAge = new RelayCommand(EnterAge);
             EntPerAddress = new RelayCommand(EnterPerAddress);
             EntEmailId = new RelayCommand(EnterEmailId);
             EntName = new RelayCommand(EnterName);
+            Fetch = new RelayCommand(GetValue);
         }
 
         public void RegexCreator()
         {
-         RegName = new Regex("^[a-zA-Z ]+$");
-         RegDob = new Regex("^(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[0-2])/((19|20)\\d\\d)$");
-         RegEmail = new Regex(@"^[^@\s]+@[^@\s]+\.[^@\s]+$");
-         RegPhoneNum = new Regex("^[6-9]\\d{9}$");
-         RegAddress = new Regex("^[a-zA-Z0-9 ,.-/]+$");
-         RegAge = new Regex("^(1[89]|[2-9][0-9])$");
-         RegBloodGroup = new Regex("^(A|B|AB|O)[+-]$");
-        }
-
-        private void EnterName()
-        {
-            if (RegName.IsMatch(Name)) {
-                FocAge = true;
-                ReadDob = true;
-            }
-            else
-            {
-                MessageBox.Show("Please enter a valid Name", "Invalid Name", MessageBoxButton.OK, MessageBoxImage.Warning);
-                Focname = true;
-            }
-                
-        }
-
-        private void EnterEmailId()
-
-
-        {
-            if(RegEmail.IsMatch(EmailID))
-            {
-                FocPerAddress = true;
-            }
-            else
-            {
-                MessageBox.Show("Please enter a valid Email ID", "Invalid Email ID", MessageBoxButton.OK, MessageBoxImage.Warning);
-                FocEmailId = true;
-            }
-            FocPerAddress = true;
-        }
-
-        private void EnterPerAddress()
-        {
-            if(RegAddress.IsMatch(PerAddress))
-            {
-                FocEntPhone = true;
-            }
-            else
-            {
-                MessageBox.Show("Please enter a valid Address", "Invalid Address", MessageBoxButton.OK, MessageBoxImage.Warning);
-                FocPerAddress = true;
-            }
-           
-        }
-
-        private void EnterAge()
-        {
-            if (RegAge.IsMatch(Age))
-            {
-                FocDob = true;
-            }
-            else
-            {
-                MessageBox.Show("Please enter a valid Age (18-99)", "Invalid Age", MessageBoxButton.OK, MessageBoxImage.Warning);
-                FocAge = true;
-            }
-        }
-
-        private void EnterNomPhoneNum()
-        {
-            if(RegPhoneNum.IsMatch(NomPhoneNum))
-            {
-                FocNomAddress = true;
-            }
-            else
-            {
-                MessageBox.Show("Please enter a valid Phone Number", "Invalid Phone Number", MessageBoxButton.OK, MessageBoxImage.Warning);
-                FocNomPhoneNum = true;
-            }
-        }
-
-        private void EnterNomRel()
-        {
-            if (NomRel == null)
-            {
-                MessageBox.Show("Please select a Relation", "Invalid Relation", MessageBoxButton.OK, MessageBoxImage.Warning);
-                FocNomRel = true;
-            }
-            else
-            {
-                FocNomPhoneNum = true;
-            }
-        }
-
-        private void EnterNomDob()
-        {
-            if(RegDob.IsMatch(NomDob))
-            {
-                FocNomRel = true;
-            }
-            else
-            {
-                MessageBox.Show("Please enter a valid Date of Birth (DD/MM/YYYY)", "Invalid Date of Birth", MessageBoxButton.OK, MessageBoxImage.Warning);
-                FocNomDob = true;
-            }
-        }
-
-        private void EnterNomName()
-        {
-            if (RegName.IsMatch(NomName))
-            {
-                FocNomDob = true;
-            }
-            else
-            {
-                MessageBox.Show("Please enter a valid Name", "Invalid Name", MessageBoxButton.OK, MessageBoxImage.Warning);
-                FocNomName = true;
-            }
-        }
-
-        private void EnterLocAddress()
-        {
-            if (RegAddress.IsMatch(LocAddress))
-            {
-                FocEmrPhoneNum = true;
-            }
-            else
-            {
-                MessageBox.Show("Please enter a valid Address", "Invalid Address", MessageBoxButton.OK, MessageBoxImage.Warning);
-                FocLocAddress = true;
-            }
-            
-        }
-
-        private void EnterEmrPhone()
-        {
-                if(RegPhoneNum.IsMatch(EmrPhoneNum))
-            {
-                FocLocAddress = true;
-            }
-            else
-            {
-                MessageBox.Show("Please enter a valid Phone Number", "Invalid Phone Number", MessageBoxButton.OK, MessageBoxImage.Warning);
-                FocEmrPhoneNum = true;
-            }
-        }
-
-        private void EnterLocNum()
-        {
-            if(RegPhoneNum.IsMatch(LocNum))
-            {
-                FocLocName = true;
-            }
-            else
-            {
-                MessageBox.Show("Please enter a valid Phone Number", "Invalid Phone Number", MessageBoxButton.OK, MessageBoxImage.Warning);
-                FocLocNum = true;
-            }
-            
-        }
-
-        private void EnterLocName()
-        {
-            if (RegName.IsMatch(LocName))
-            {
-                FocLocNum = true;
-            }
-            else
-            {
-                MessageBox.Show("Please enter a valid Name", "Invalid Name", MessageBoxButton.OK, MessageBoxImage.Warning);
-                FocLocName = true;
-                
-            }
-        }
-
-        private void EnterBloodgroup()
-        {
-            if (RegBloodGroup.IsMatch(Bloodgrp))
-            {
-                FocEmailId = true;
-            }
-            else
-            {
-                MessageBox.Show("Please Enter a valid Blood Group ( Eg:B+ )");
-                FocBloodgrp = true;
-
-            }
-            
-        }
-
-        private void EnterFatherName()
-        {
-            if (RegName.IsMatch(Fathername))
-            {
-                FocBloodgrp = true;
-            }
-            else
-            {
-                MessageBox.Show("Please enter a valid Name", "Invalid Name", MessageBoxButton.OK, MessageBoxImage.Warning);
-                FocFatherName=true;
-            }
-            
-        }
-
-        private void EnterAltPhone()
-        {
-            if (RegPhoneNum.IsMatch(AltPhone))
-            {
-                FocLocName = true;
-            }
-            else
-            {
-                MessageBox.Show("Please enter a valid Phone Number", "Invalid Phone Number", MessageBoxButton.OK, MessageBoxImage.Warning);
-                FocAltPhone = true;
-            }
-           
-        }
-
-        private void EnterPerphone()
-        {
-            if (RegPhoneNum.IsMatch(PerPhone))
-            {
-                FocAltPhone = true;
-            }
-            else
-            {
-                MessageBox.Show("Please enter a valid Phone Number", "Invalid Phone Number", MessageBoxButton.OK, MessageBoxImage.Warning);
-                FocEntPhone = true;
-            }
-            
+            RegName = new Regex("^[a-zA-Z ]+$");
+            RegDob = new Regex("^(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[0-2])/((19|20)\\d\\d)$");
+            RegEmail = new Regex(@"^[^@\s]+@[^@\s]+\.[^@\s]+$");
+            RegPhoneNum = new Regex("^[6-9]\\d{9}$");
+            RegAddress = new Regex("^[a-zA-Z0-9 ,.-/]+$");
+            RegAge = new Regex("^(1[89]|[2-9][0-9])$");
+            RegBloodGroup = new Regex("^(A|B|AB|O)[+-]$");
         }
 
         private void Generate()
         {
-            nullvalue =false;
+            nullvalue = false;
             nullvaluename = "Please enter the below values to continue";
             valuegetter();
-            if (!nullvalue) {
+            if (!nullvalue)
+            {
                 excelHelp = new ExcelHelp();
-                filePath = @"D:\Karuna\Employee_Form\Employee_Form\ExcelFiles\"+Name.Trim()+".xlsx";
+                filePath = @"C:\Users\AEIS LAPTOP Abhay\Downloads\Employee_Form\Employee_Form\ExcelFiles\" + Name.Trim() + ".xlsx";
                 excelHelp.OpenExcel(filePath);
                 excelHelp.WriteHeader();
                 string agedob = Age + " & " + Empdob;
                 string LCP = LocName + "\n" + LocNum;
                 string NomDetails = NomName + "\n" + NomDob + "\n" + NomRel + "\n" + NomPhoneNum + "\n" + NomAddress;
-                excelHelp.InsertData(Name,agedob,PerAddress,PerPhone,AltPhone,Fathername,Bloodgrp,EmailID,LCP,EmrPhoneNum,LocAddress,NomDetails);
+                excelHelp.InsertData(Name, agedob, PerAddress, PerPhone, AltPhone, Fathername, Bloodgrp, EmailID, LCP, EmrPhoneNum, LocAddress, NomDetails);
                 excelHelp.Footer();
                 excelHelp.SaveAndClose(filePath);
-                MessageBox.Show("File Created Successfully .....","File Created",MessageBoxButton.OK,MessageBoxImage.Information);
+                MessageBox.Show("File Created Successfully .....", "File Created", MessageBoxButton.OK, MessageBoxImage.Information);
                 EmptyField();
+                ReadOnly();
             }
             else
             {
-                MessageBox.Show(nullvaluename,"Fill in the blanks",MessageBoxButton.OK,MessageBoxImage.Warning);
+                MessageBox.Show(nullvaluename, "Fill in the blanks", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
-            
-        }
 
-        
+        }
 
         public void EmptyField()
         {
@@ -329,10 +192,12 @@ namespace Employee_Form.ViewModel
             Bloodgrp = "";
             LocName = "";
             LocNum = "";
+            EmailID = "";
             EmrPhoneNum = "";
             LocAddress = "";
             NomName = "";
             NomDob = "";
+            Cmbindex = 0;
             NomRel = null;
             NomPhoneNum = "";
             NomAddress = "";
@@ -340,6 +205,380 @@ namespace Employee_Form.ViewModel
             PerAddress = "";
         }
 
+        public void nullvaluevaluechecker(string val, string name)
+        {
+
+            if (string.IsNullOrEmpty(val))
+            {
+                nullvalue = true;
+                nullvaluename += "\n" + name;
+            }
+
+        }
+
+
+
+        public void valuegetter()
+        {
+
+            nullvaluevaluechecker(Name, "Name");
+            nullvaluevaluechecker(Age, "Age");
+            nullvaluevaluechecker(Empdob, "Date Of Birth");
+            nullvaluevaluechecker(PerAddress, "Permenant Address");
+            nullvaluevaluechecker(PerPhone, "Personal Phone Number");
+            nullvaluevaluechecker(AltPhone, "Alternate Phone Number");
+            nullvaluevaluechecker(Fathername, "Father Name");
+            nullvaluevaluechecker(Bloodgrp, "Blood Group");
+            nullvaluevaluechecker(Bloodgrp, "Email Id");
+            nullvaluevaluechecker(LocName, "Local Contact Person Name");
+            nullvaluevaluechecker(LocNum, "Local Contact Person Number");
+            nullvaluevaluechecker(EmrPhoneNum, "Emergency Phone Number");
+            nullvaluevaluechecker(LocAddress, "Local Address with Landmark");
+            nullvaluevaluechecker(NomName, "Nominee Name");
+            nullvaluevaluechecker(NomDob, "Nominee Dob");
+            nullvaluevaluechecker(NomRel, "Nominee Relation");
+            nullvaluevaluechecker(NomPhoneNum, "Nominee Phone Number");
+            nullvaluevaluechecker(NomAddress, "Nominee Address");
+
+
+
+        }
+
+        // --------------- Method Used To Change The Focus of Every Property to true -----------------//
+        public void FocusRemover()
+        {
+            Focname = true;
+            FocDob = false;
+            FocFatherName = false;
+            FocBloodgrp = false;
+            FocNomName = false;
+            FocNomRel = false;
+            FocNomPhoneNum = false;
+            FocNomAddress = false;
+            FocAge = false;
+            FocPerAddress = false;
+            FocEmailId = false;
+            FocNomDob = false;
+            FocLocAddress = false;
+            FocEmrPhoneNum = false;
+            FocLocNum = false;
+            FocLocName = false;
+            FocAltPhone = false;
+            FocEntPhone = false;
+        }
+
+        // --------------- Method Used to Change Field To Read Only ------------------ //
+        public void ReadOnly()
+        {
+            ReadDob = false;
+            ReadFatherName = true;
+            ReadBloodgrp = true;
+            ReadNomName = true;
+            ReadNomRel = false;
+            ReadNomPhoneNum = true;
+            ReadNomAddress = true;
+            ReadAge = true;
+            ReadPerAddress = true;
+            Readname = false;
+            ReadEmailId = true;
+            ReadNomDob = false;
+            ReadLocAddress = true;
+            ReadEmrPhoneNum = true;
+            ReadLocNum = true;
+            ReadLocName = true;
+            ReadAltPhone = true;
+            ReadEntPhone = true;
+        }
+
+        public void ChangeReadOnly()
+        {
+            ReadDob = true;
+            ReadFatherName = false;
+            ReadBloodgrp = false;
+            ReadNomName = false;
+            ReadNomRel = true;
+            ReadNomPhoneNum = false;
+            ReadNomAddress = false;
+            ReadAge = false;
+            ReadPerAddress = false;
+            Readname = true;
+            ReadEmailId = false;
+            ReadNomDob = true;
+            ReadLocAddress = false;
+            ReadEmrPhoneNum = false;
+            ReadLocNum = false;
+            ReadLocName = false;
+            ReadAltPhone = false;
+            ReadEntPhone = false;
+
+        }
+
+        private void EnterNomAddress()
+        {
+            if (RegAddress.IsMatch(NomAddress))
+            {
+            }
+            else
+            {
+                MessageBox.Show("Please enter a valid Name", "Invalid Name", MessageBoxButton.OK, MessageBoxImage.Warning);
+                FocNomAddress = true;
+            }
+        }
+        private void EnterName()
+        {
+            if (RegName.IsMatch(Name)) {
+
+                FocusRemover();
+                ReadAge = false;
+                FocAge = true;
+            }
+            else
+            {
+                MessageBox.Show("Please enter a valid Name", "Invalid Name", MessageBoxButton.OK, MessageBoxImage.Warning);
+                FocusRemover();
+                Focname = true;
+            }
+                
+        }
+        private void EnterEmailId()
+
+
+        {
+            if(RegEmail.IsMatch(EmailID))
+            {
+                FocusRemover();
+                ReadPerAddress = false;
+                FocPerAddress = true;
+                
+            }
+            else
+            {
+                MessageBox.Show("Please enter a valid Email ID", "Invalid Email ID", MessageBoxButton.OK, MessageBoxImage.Warning);
+                FocusRemover();
+                FocEmailId = true;
+            }
+            FocPerAddress = true;
+        }
+        private void EnterPerAddress()
+        {
+            if(RegAddress.IsMatch(PerAddress))
+            {
+                FocusRemover();
+                ReadEntPhone = false;
+                FocEntPhone = true;
+            }
+            else
+            {
+                MessageBox.Show("Please enter a valid Address", "Invalid Address", MessageBoxButton.OK, MessageBoxImage.Warning);
+                FocusRemover();
+                FocPerAddress = true;
+            }
+           
+        }
+        private void EnterAge()
+        {
+            if (RegAge.IsMatch(Age))
+            {
+                FocusRemover();
+                ReadDob = true;
+                FocDob = true;
+            }
+            else
+            {
+                MessageBox.Show("Please enter a valid Age (18-99)", "Invalid Age", MessageBoxButton.OK, MessageBoxImage.Warning);
+                FocusRemover();
+                FocAge = true;
+            }
+        }
+        private void EnterNomPhoneNum()
+        {
+            if(RegPhoneNum.IsMatch(NomPhoneNum))
+            {
+                FocusRemover();
+                ReadNomAddress = false;
+                FocNomAddress = true;
+            }
+            else
+            {
+                MessageBox.Show("Please enter a valid Phone Number", "Invalid Phone Number", MessageBoxButton.OK, MessageBoxImage.Warning);
+                FocusRemover();
+                FocNomPhoneNum = true;
+            }
+        }
+        private void EnterNomRel()
+        {
+            if (NomRel == null)
+            {
+                FocusRemover();
+                ReadNomPhoneNum = false;
+                FocNomPhoneNum = true;
+            }
+            else
+            {
+                MessageBox.Show("Please select a Relation", "Invalid Relation", MessageBoxButton.OK, MessageBoxImage.Warning);
+                FocusRemover();
+                FocNomPhoneNum = true;
+            }
+        }
+        private void EnterNomDob()
+        {
+            if(RegDob.IsMatch(NomDob))
+            {
+                FocusRemover();
+                ReadNomRel = true;
+                FocNomRel = true;
+            }
+            else
+            {
+                MessageBox.Show("Please enter a valid Date of Birth (DD/MM/YYYY)", "Invalid Date of Birth", MessageBoxButton.OK, MessageBoxImage.Warning);
+                FocusRemover();
+                FocNomDob = true;
+            }
+        }
+        private void EnterNomName()
+        {
+            if (RegName.IsMatch(NomName))
+            {
+                FocusRemover();
+                ReadNomDob = true;
+                FocNomDob = true;
+            }
+            else
+            {
+                MessageBox.Show("Please enter a valid Name", "Invalid Name", MessageBoxButton.OK, MessageBoxImage.Warning);
+                FocNomName = true;
+            }
+        }
+        private void EnterLocAddress()
+        {
+            if (RegAddress.IsMatch(LocAddress))
+            {
+                FocusRemover();
+                ReadNomName = false;
+                FocNomName = true;
+            }
+            else
+            {
+                MessageBox.Show("Please enter a valid Address", "Invalid Address", MessageBoxButton.OK, MessageBoxImage.Warning);
+                FocusRemover();
+                FocLocAddress = true;
+            }
+            
+        }
+        private void EnterEmrPhone()
+        {
+                if(RegPhoneNum.IsMatch(EmrPhoneNum))
+            {
+                FocusRemover();
+                ReadLocAddress = false;
+                FocLocAddress = true;
+            }
+            else
+            {
+                MessageBox.Show("Please enter a valid Phone Number", "Invalid Phone Number", MessageBoxButton.OK, MessageBoxImage.Warning);
+                FocEmrPhoneNum = true;
+            }
+        }
+        private void EnterLocNum()
+        {
+            if(RegPhoneNum.IsMatch(LocNum))
+            {
+                FocusRemover();
+                ReadEmrPhoneNum = false;
+                FocEmrPhoneNum = true;
+            }
+            else
+            {
+                MessageBox.Show("Please enter a valid Phone Number", "Invalid Phone Number", MessageBoxButton.OK, MessageBoxImage.Warning);
+                FocusRemover();
+                FocLocNum = true;
+            }
+            
+        }
+        private void EnterLocName()
+        {
+            if (RegName.IsMatch(LocName))
+            {
+                FocusRemover();
+                ReadLocNum = false;
+                FocLocNum = true;
+            }
+            else
+            {
+                MessageBox.Show("Please enter a valid Name", "Invalid Name", MessageBoxButton.OK, MessageBoxImage.Warning);
+                FocusRemover();
+                FocLocName = true;
+                
+            }
+        }
+        private void EnterBloodgroup()
+        {
+            if (RegBloodGroup.IsMatch(Bloodgrp))
+            {
+                FocusRemover();
+                ReadEmailId = false;
+                FocEmailId = true;
+            }
+            else
+            {
+                MessageBox.Show("Please Enter a valid Blood Group ( Eg:B+ )");
+                FocusRemover();
+                FocBloodgrp = true;
+
+            }
+            
+        }
+        private void EnterFatherName()
+        {
+            if (RegName.IsMatch(Fathername))
+            {
+                FocusRemover();
+                ReadBloodgrp = false;
+                FocBloodgrp = true;
+            }
+            else
+            {
+                MessageBox.Show("Please enter a valid Name", "Invalid Name", MessageBoxButton.OK, MessageBoxImage.Warning);
+                FocusRemover();
+                FocFatherName =true;
+            }
+            
+        }
+        private void EnterAltPhone()
+        {
+            if (RegPhoneNum.IsMatch(AltPhone))
+            {
+                FocusRemover();
+                ReadLocName = false;
+                FocLocName = true;
+            }
+            else
+            {
+                MessageBox.Show("Please enter a valid Phone Number", "Invalid Phone Number", MessageBoxButton.OK, MessageBoxImage.Warning);
+                FocusRemover();
+                FocAltPhone = true;
+            }
+           
+        }
+        private void EnterPerphone()
+        {
+            if (RegPhoneNum.IsMatch(PerPhone))
+            {
+                FocusRemover();
+                ReadAltPhone = false;
+                FocAltPhone = true;
+            }
+            else
+            {
+                MessageBox.Show("Please enter a valid Phone Number", "Invalid Phone Number", MessageBoxButton.OK, MessageBoxImage.Warning);
+                FocusRemover();
+                FocEntPhone = true;
+            }
+            
+        }
+
+
+        // ------------ Property Declaration -----------//
         private string name;
         private string empdob;
         private string perPhone;
@@ -395,6 +634,18 @@ namespace Employee_Form.ViewModel
         private bool readAltPhone;
         private bool readEntPhone;
 
+        private int cmbindex;
+
+        public int Cmbindex
+        {
+            get { return cmbindex; }
+            set { cmbindex = value;
+
+                OnPropertyChanged();
+                    }
+        }
+
+
         // ---------------   Read Property ----------------- //
 
         public bool ReadDob
@@ -406,8 +657,6 @@ namespace Employee_Form.ViewModel
                 OnPropertyChanged();
             }
         }
-
-
         public bool ReadEntPhone
         {
             get { return readEntPhone; }
@@ -417,9 +666,6 @@ namespace Employee_Form.ViewModel
                 OnPropertyChanged();
             }
         }
-
-
-
         public bool ReadAltPhone
         {
             get { return readAltPhone; }
@@ -429,9 +675,6 @@ namespace Employee_Form.ViewModel
                 OnPropertyChanged();
             }
         }
-
-
-
         public bool ReadFatherName
         {
             get { return readFatherName; }
@@ -441,9 +684,6 @@ namespace Employee_Form.ViewModel
                 OnPropertyChanged();
             }
         }
-
-
-
         public bool ReadBloodgrp
         {
             get { return readBloodgrp; }
@@ -453,9 +693,6 @@ namespace Employee_Form.ViewModel
                 OnPropertyChanged();
             }
         }
-
-
-
         public bool ReadLocName
         {
             get { return readLocName; }
@@ -465,10 +702,7 @@ namespace Employee_Form.ViewModel
                 OnPropertyChanged();
             }
         }
-
-
-
-        public bool ReadLocNum
+       public bool ReadLocNum
         {
             get { return readLocNum; }
             set
@@ -477,9 +711,6 @@ namespace Employee_Form.ViewModel
                 OnPropertyChanged();
             }
         }
-
-
-
         public bool ReadEmrPhoneNum
         {
             get { return readEmrPhoneNum; }
@@ -489,9 +720,7 @@ namespace Employee_Form.ViewModel
                 OnPropertyChanged();
             }
         }
-
-
-        public bool ReadLocAddress
+       public bool ReadLocAddress
         {
             get { return readLocAddress; }
             set
@@ -500,9 +729,6 @@ namespace Employee_Form.ViewModel
                 OnPropertyChanged();
             }
         }
-
-
-
         public bool ReadNomName
         {
             get { return readNomName; }
@@ -512,7 +738,6 @@ namespace Employee_Form.ViewModel
                 OnPropertyChanged();
             }
         }
-
         public bool ReadNomDob
         {
             get { return readNomNDob; }
@@ -522,7 +747,6 @@ namespace Employee_Form.ViewModel
                 OnPropertyChanged();
             }
         }
-
         public bool ReadNomRel
         {
             get { return readNomRel; }
@@ -532,9 +756,6 @@ namespace Employee_Form.ViewModel
                 OnPropertyChanged();
             }
         }
-
-
-
         public bool ReadNomPhoneNum
         {
             get { return readNomPhoneNum; }
@@ -544,8 +765,6 @@ namespace Employee_Form.ViewModel
                 OnPropertyChanged();
             }
         }
-
-
         public bool ReadNomAddress
         {
             get { return readNomAddress; }
@@ -555,8 +774,6 @@ namespace Employee_Form.ViewModel
                 OnPropertyChanged();
             }
         }
-
-
         public bool ReadAge
         {
             get { return readAge; }
@@ -566,8 +783,6 @@ namespace Employee_Form.ViewModel
                 OnPropertyChanged();
             }
         }
-
-
         public bool ReadPerAddress
         {
             get { return readPerAddress; }
@@ -577,9 +792,6 @@ namespace Employee_Form.ViewModel
                 OnPropertyChanged();
             }
         }
-
-
-
         public bool ReadEmailId
         {
             get { return readEmailId; }
@@ -611,8 +823,6 @@ namespace Employee_Form.ViewModel
                 OnPropertyChanged();
             }
         }
-
-
         public bool FocEntPhone
         {
             get { return focEntPhone; }
@@ -622,9 +832,6 @@ namespace Employee_Form.ViewModel
                 OnPropertyChanged();
             }
         }
-
-
-
         public bool FocAltPhone
         {
             get { return focAltPhone; }
@@ -634,9 +841,6 @@ namespace Employee_Form.ViewModel
                 OnPropertyChanged();
             }
         }
-
-
-
         public bool FocFatherName
         {
             get { return focFatherName; }
@@ -646,9 +850,6 @@ namespace Employee_Form.ViewModel
                 OnPropertyChanged();
             }
         }
-
-
-
         public bool FocBloodgrp
         {
             get { return focBloodgrp; }
@@ -658,9 +859,6 @@ namespace Employee_Form.ViewModel
                 OnPropertyChanged();
             }
         }
-
-
-
         public bool FocLocName
         {
             get { return focLocName; }
@@ -670,9 +868,6 @@ namespace Employee_Form.ViewModel
                 OnPropertyChanged();
             }
         }
-
-
-
         public bool FocLocNum
         {
             get { return focLocNum; }
@@ -682,9 +877,6 @@ namespace Employee_Form.ViewModel
                 OnPropertyChanged();
             }
         }
-
-
-
         public bool FocEmrPhoneNum
         {
             get { return focEmrPhoneNum; }
@@ -694,8 +886,6 @@ namespace Employee_Form.ViewModel
                 OnPropertyChanged();
             }
         }
-
-
         public bool FocLocAddress
         {
             get { return focLocAddress; }
@@ -705,9 +895,6 @@ namespace Employee_Form.ViewModel
                 OnPropertyChanged();
             }
         }
-
-
-
         public bool FocNomName
         {
             get { return focNomName; }
@@ -717,7 +904,6 @@ namespace Employee_Form.ViewModel
                 OnPropertyChanged();
             }
         }
-
         public bool FocNomDob
         {
             get { return focNomNDob; }
@@ -727,7 +913,6 @@ namespace Employee_Form.ViewModel
                 OnPropertyChanged();
             }
         }
-
         public bool FocNomRel
         {
             get { return focNomRel; }
@@ -737,9 +922,6 @@ namespace Employee_Form.ViewModel
                 OnPropertyChanged();
             }
         }
-
-
-
         public bool FocNomPhoneNum
         {
             get { return focNomPhoneNum; }
@@ -749,8 +931,6 @@ namespace Employee_Form.ViewModel
                 OnPropertyChanged();
             }
         }
-
-
         public bool FocNomAddress
         {
             get { return focNomAddress; }
@@ -760,8 +940,6 @@ namespace Employee_Form.ViewModel
                 OnPropertyChanged();
             }
         }
-
-
         public bool FocAge
         {
             get { return focAge; }
@@ -771,8 +949,6 @@ namespace Employee_Form.ViewModel
                 OnPropertyChanged();
             }
         }
-
-
         public bool FocPerAddress
         {
             get { return focPerAddress; }
@@ -782,9 +958,6 @@ namespace Employee_Form.ViewModel
                 OnPropertyChanged();
             }
         }
-
-
-
         public bool FocEmailId
         {
             get { return focEmailId; }
@@ -805,7 +978,7 @@ namespace Employee_Form.ViewModel
         }
 
 
-        //-- Focus Finished ----------
+        //------------ Text Field's Content Property---------- //
 
         public string EmailID
         {
@@ -814,8 +987,6 @@ namespace Employee_Form.ViewModel
                 OnPropertyChanged();
             }
         }
-
-
         public string PerAddress
         {
             get { return perAddress; }
@@ -823,8 +994,6 @@ namespace Employee_Form.ViewModel
                 OnPropertyChanged();
             }
         }
-
-
         public string Age
         {
             get { return age; }
@@ -832,8 +1001,6 @@ namespace Employee_Form.ViewModel
                 OnPropertyChanged();
             }
         }
-
-
         public string NomAddress
         {
             get { return nomAddress; }
@@ -841,7 +1008,6 @@ namespace Employee_Form.ViewModel
                 OnPropertyChanged();
             }
         }
-
         public string NomPhoneNum
         {
             get { return nomPhoneNum; }
@@ -849,8 +1015,6 @@ namespace Employee_Form.ViewModel
                 OnPropertyChanged();
             }
         }
-
-
         public string NomRel
         {
             get { return nomRel; }
@@ -862,11 +1026,77 @@ namespace Employee_Form.ViewModel
                 }
                 else
                 {
+                    FocusRemover();
                     nomRel = value;
+                    ReadNomPhoneNum = false;
                     FocNomPhoneNum = true;
                     OnPropertyChanged();
                 }
                     
+            }
+        }
+        
+        public string NomName
+        {
+            get { return nomName; }
+            set { nomName = value;
+                OnPropertyChanged();
+            }
+        }
+        public string LocAddress
+        {
+            get { return locAddress; }
+            set { locAddress = value;
+                OnPropertyChanged();
+            }
+        }
+        public string EmrPhoneNum
+        {
+            get { return emrPhoneNum; }
+            set { emrPhoneNum = value;
+                OnPropertyChanged();
+            }
+        }
+        public string LocNum
+        {
+            get { return locNum; }
+            set { locNum = value;
+                OnPropertyChanged();
+            }
+        }
+        public string LocName
+        {
+            get { return locName; }
+            set { locName = value;
+                OnPropertyChanged();
+            }
+        }
+        public string Bloodgrp
+        {
+            get { return bloodgrp; }
+            set { bloodgrp = value;
+                OnPropertyChanged();
+            }
+        }
+        public string Fathername
+        {
+            get { return fathername; }
+            set { fathername = value;
+                OnPropertyChanged();
+            }
+        }
+        public string AltPhone
+        {
+            get { return altPhone; }
+            set { altPhone = value;
+                OnPropertyChanged();
+            }
+        }
+        public string PerPhone
+        {
+            get { return perPhone; }
+            set { perPhone = value;
+                OnPropertyChanged();
             }
         }
 
@@ -883,84 +1113,21 @@ namespace Employee_Form.ViewModel
                 }
                 else
                 {
-                    nomDob = value;
+                    FocusRemover();
+                    if (DateTime.TryParse(value, out DateTime dt))
+                    {
+                        nomDob = dt.ToShortDateString();
+                    }
+                    else
+                    {
+                        nomDob = value;
+                    }
+
+                    ReadNomRel = true;
                     FocNomRel = true;
                     OnPropertyChanged();
                 }
-                    
-            }
-        }
 
-        public string NomName
-        {
-            get { return nomName; }
-            set { nomName = value;
-                OnPropertyChanged();
-            }
-        }
-
-
-        public string LocAddress
-        {
-            get { return locAddress; }
-            set { locAddress = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public string EmrPhoneNum
-        {
-            get { return emrPhoneNum; }
-            set { emrPhoneNum = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public string LocNum
-        {
-            get { return locNum; }
-            set { locNum = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public string LocName
-        {
-            get { return locName; }
-            set { locName = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public string Bloodgrp
-        {
-            get { return bloodgrp; }
-            set { bloodgrp = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public string Fathername
-        {
-            get { return fathername; }
-            set { fathername = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public string AltPhone
-        {
-            get { return altPhone; }
-            set { altPhone = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public string PerPhone
-        {
-            get { return perPhone; }
-            set { perPhone = value;
-                OnPropertyChanged();
             }
         }
 
@@ -976,7 +1143,17 @@ namespace Employee_Form.ViewModel
                 }
                 else
                 {
-                    empdob = value;
+                    FocusRemover();
+
+                    if (DateTime.TryParse(value, out DateTime dt))
+                    {
+                        empdob = dt.ToShortDateString(); 
+                    }
+                    else
+                    {
+                        empdob = value; 
+                    }                    
+                    ReadFatherName = false;
                     FocFatherName = true;
                     OnPropertyChanged();
                 }
@@ -984,8 +1161,6 @@ namespace Employee_Form.ViewModel
                     
             }
         }
-
-
         public string Name
         {
             get { return name; }
@@ -995,6 +1170,7 @@ namespace Employee_Form.ViewModel
         }
 
 
+        // --------------- Button ICommand Property ------------- //
         public ICommand EntPerPhone { get; set; }
         public ICommand EntAltPhone { get; set; }
         public ICommand EntFatherName { get; set; }
@@ -1015,6 +1191,8 @@ namespace Employee_Form.ViewModel
         public ICommand Reset { get; set; }
         public ICommand PrintCommand { get; set; }
 
+        public ICommand Fetch { get; set; }
+
 
 
 
@@ -1024,86 +1202,8 @@ namespace Employee_Form.ViewModel
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public void nullvaluevaluechecker(string val,string name)
-        {
-            
-            if (string.IsNullOrEmpty(val))
-            {
-                nullvalue = true;
-                nullvaluename += "\n"+name;
-            }
 
-        }
 
-        public void valuegetter()
-        {
-            
-            nullvaluevaluechecker(Name,"Name");
-            nullvaluevaluechecker(Age, "Age");
-            nullvaluevaluechecker(Empdob,"Date Of Birth");
-            nullvaluevaluechecker(PerAddress, "Permenant Address");
-            nullvaluevaluechecker(PerPhone,"Personal Phone Number");
-            nullvaluevaluechecker(AltPhone,"Alternate Phone Number");
-            nullvaluevaluechecker(Fathername,"Father Name");
-            nullvaluevaluechecker(Bloodgrp,"Blood Group");
-            nullvaluevaluechecker(Bloodgrp,"Email Id");
-            nullvaluevaluechecker(LocName,"Local Contact Person Name");
-            nullvaluevaluechecker(LocNum,"Local Contact Person Number");
-            nullvaluevaluechecker(EmrPhoneNum,"Emergency Phone Number");
-            nullvaluevaluechecker(LocAddress,"Local Address with Landmark");
-            nullvaluevaluechecker(NomName,"Nominee Name");
-            nullvaluevaluechecker(NomDob,"Nominee Dob");
-            nullvaluevaluechecker(NomRel,"Nominee Relation");
-            nullvaluevaluechecker(NomPhoneNum,"Nominee Phone Number");
-            nullvaluevaluechecker(NomAddress,"Nominee Address");
-            
-            
-
-        }
-
-        public void FocusRemover()
-        {
-        FocDob=false;
-        FocFatherName = false;
-        FocBloodgrp = false;
-        FocNomName = false;
-        FocNomRel = false;
-        FocNomPhoneNum = false;
-        FocNomAddress = false;
-        FocAge = false;
-        FocPerAddress = false;
-        Focname = false;
-        FocEmailId = false;
-        FocNomDob = false;
-        FocLocAddress = false;
-        FocEmrPhoneNum = false;
-        FocLocNum = false;
-        FocLocName = false;
-        FocAltPhone = false;
-        FocEntPhone = false;
-        }
-
-        public void ReadOnly()
-        {
-            ReadDob = false;
-            ReadFatherName = true;
-            ReadBloodgrp = true;
-            ReadNomName = true;
-            ReadNomRel = false;
-            ReadNomPhoneNum = true;
-            ReadNomAddress = true;
-            ReadAge = true;
-            ReadPerAddress = true;
-            Readname = true;
-            ReadEmailId = true;
-            ReadNomDob = false;
-            ReadLocAddress = true;
-            ReadEmrPhoneNum = true;
-            ReadLocNum = true;
-            ReadLocName = true;
-            ReadAltPhone = true;
-            ReadEntPhone = true;
-        }
 
         
     }
