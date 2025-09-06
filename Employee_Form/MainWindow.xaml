@@ -35,9 +35,11 @@
 
 
 
-                            <UC:UserControl1 lblContent="Name :" txtContent="{Binding Name,Mode=TwoWay}"/>
+                            <UC:UserControl1 lblContent="Name :" txtContent="{Binding Name,Mode=TwoWay}" Read="{Binding Readname,Mode=TwoWay}"
+                                             EnterKeyCommand="{Binding EntName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  IsFocused="{Binding Focname}"/>
 
-                            <UC:UserControl1 lblContent="Age :" txtContent="{Binding Age,Mode=TwoWay}"/>
+                            <UC:UserControl1 lblContent="Age :" txtContent="{Binding Age,Mode=TwoWay}"  Read="{Binding ReadAge}"
+                                             IsFocused="{Binding FocAge}" EnterKeyCommand="{Binding EntAge,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
 
                             <Grid>
                                 <Grid.ColumnDefinitions>
@@ -46,45 +48,42 @@
                                 </Grid.ColumnDefinitions>
 
                                 <Grid Grid.Column="0">
-                                    <Label Content="D.O.B :" HorizontalAlignment="Right" Margin="5" FontSize="25" Height="70" Width="160" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" VerticalAlignment="Center"/>
+                                    <Label Content="D.O.B :" HorizontalAlignment="Right" Margin="5" FontSize="25" 
+                                           Height="70" Width="160" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" 
+                                           VerticalAlignment="Center"/>
                                 </Grid>
 
                                 <Grid Grid.Column="1">
-                                    <DatePicker SelectedDate="{Binding Empdob,Mode=TwoWay}" FontSize="20" Height="60" Width="320" Margin="0 8 8 8" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+                                    <DatePicker local:FocusExtension.IsFocused="{Binding DobEnt}"  SelectedDate="{Binding Empdob,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding ReadDob}"
+                                                FontSize="20" Height="60" Width="320" Margin="0 8 8 8" HorizontalContentAlignment="Center" 
+                                                VerticalContentAlignment="Center"/>
                                 </Grid>
                             </Grid>
 
                             <Grid>
-                                <UC:UserControl1 lblContent="Father Name :" txtContent="{Binding Fathername,Mode=TwoWay}"/>
+                                <UC:UserControl1 lblContent="Father Name :" IsFocused="{Binding FocFatherName}"  
+                                                 txtContent="{Binding Fathername,Mode=TwoWay}" Read="{Binding ReadFatherName}"
+                                                 EnterKeyCommand="{Binding EntFatherName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
                             </Grid>
 
                             <Grid>
-                                <UC:UserControl1 lblContent="Blood Group :" txtContent="{Binding Bloodgrp,Mode=TwoWay}"/>
+                                <UC:UserControl1 lblContent="Blood Group :" IsFocused="{Binding FocBloodgrp}" 
+                                                 txtContent="{Binding Bloodgrp,Mode=TwoWay}" Read="{Binding ReadBloodgrp}"
+                                                 EnterKeyCommand="{Binding EntBloodgrp,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
                             </Grid>
 
                             <Grid>
-                                <UC:UserControl1 lblContent="Email ID :" txtContent="{Binding EmailID,Mode=TwoWay}"/>
+                                <UC:UserControl1 lblContent="Email ID :" EnterKeyCommand="{Binding EntEmailId,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
+                                                 IsFocused="{Binding FocEmailId}" txtContent="{Binding EmailID,Mode=TwoWay}" Read="{Binding ReadEmailId}"/>
                             </Grid>
 
                             <Grid >
 
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="1.2*"/>
-                                    <ColumnDefinition Width="2.4*"/>
-                                </Grid.ColumnDefinitions>
-
-                                <Grid Grid.Column="0" Height="100" Width="160">
-                                    
-                                    <StackPanel>
-                                        <TextBlock Text="Permanent : Address" FontSize="25" TextWrapping="Wrap" HorizontalAlignment="Right"/>
-                                    </StackPanel>
-                                </Grid>
-
-                                <Grid Grid.Column="1"  HorizontalAlignment="Left">
-                                    <TextBox  FontSize="20" Height="100" Width="320" Text="{Binding PerAddress,Mode=TwoWay}" AcceptsReturn="True" TextWrapping="Wrap"  Margin="7 0 0 0" HorizontalContentAlignment="Left" VerticalContentAlignment="Top" AllowDrop="True"/>
-
-
-                                </Grid>
+                                <UC:UC_Address lblContent="Address :" Readonly="{Binding ReadPerAddress,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
+                                               txt_content="{Binding PerAddress,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
+                                               EnterTxt="{Binding EntPerAddress,Mode=TwoWay}"  IsFocusedpr="{Binding FocPerAddress,Mode=TwoWay}"/>
+                                
+                              
                             </Grid>
 
                             <Grid>
@@ -92,49 +91,54 @@
                             </Grid>
 
                             <Grid>
-                                <UC:UserControl1 lblContent="Personal :" txtContent="{Binding PerPhone,Mode=TwoWay}"/>
+                                <UC:UserControl1 lblContent="Personal :" IsFocused="{Binding FocEntPhone}" 
+                                                 txtContent="{Binding PerPhone,Mode=TwoWay}" Read="{Binding ReadEntPhone}"
+                                                 EnterKeyCommand="{Binding EntPerPhone,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
                             </Grid>
 
                             <Grid>
-                                <UC:UserControl1 lblContent="Alternate :" txtContent="{Binding AltPhone,Mode=TwoWay}"/>
+                                <UC:UserControl1 lblContent="Alternate :" IsFocused="{Binding FocAltPhone}" 
+                                                 txtContent="{Binding AltPhone,Mode=TwoWay}" Read="{Binding ReadAltPhone}"
+                                                 EnterKeyCommand="{Binding EntAltPhone,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
                             </Grid>
                             
                             <Grid>
-                                <Label Content="Local Contact Person" FontSize="30" FontWeight="Bold" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+                                <Label Content="Local Contact Person" FontSize="30" FontWeight="Bold" 
+                                       HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
                             </Grid>
 
                             <Grid>
-                                <UC:UserControl1 lblContent="Name:" txtContent="{Binding LocName,Mode=TwoWay}"/>
+                                <UC:UserControl1 lblContent="Name:" IsFocused="{Binding FocLocName}"  Read="{Binding ReadLocName}"
+                                                 EnterKeyCommand="{Binding EntLocName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                                 txtContent="{Binding LocName,Mode=TwoWay}"/>
                             </Grid>
 
                             <Grid>
-                                <UC:UserControl1 lblContent="Phone :" txtContent="{Binding LocNum,Mode=TwoWay}"/>
+                                <UC:UserControl1 lblContent="Phone :" IsFocused="{Binding FocLocNum}" Read="{Binding ReadLocNum}"
+                                                 EnterKeyCommand="{Binding EntLocNum,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                                 txtContent="{Binding LocNum,Mode=TwoWay}"/>
                             </Grid>
 
                             <Grid>
-                                <Label Content="Emergency Contact" FontSize="30" FontWeight="Bold" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+                                <Label Content="Emergency Contact" FontSize="30" FontWeight="Bold"
+                                       HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
                             </Grid>
 
                             <Grid>
-                                <UC:UserControl1 lblContent="Phone No :" txtContent="{Binding EmrPhoneNum,Mode=TwoWay}"/>
+                                <UC:UserControl1 lblContent="Phone No :" IsFocused="{Binding FocEmrPhoneNum}"   Read="{Binding ReadEmrPhoneNum}"
+                                                 EnterKeyCommand="{Binding EntEmrPhoneNum,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                                 txtContent="{Binding EmrPhoneNum,Mode=TwoWay}"/>
                             </Grid>
 
                             <Grid >
+
+                                <UC:UC_Address lblContent="Local Address :" 
+                                               Readonly="{Binding ReadLocAddress,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
+                                               txt_content="{Binding LocAddress,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  
+                                               EnterTxt="{Binding EntLocAddress,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  
+                                               IsFocusedpr="{Binding FocLocAddress,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+
                                 
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="1.2*"/>
-                                    <ColumnDefinition Width="2.4*"/>
-                                </Grid.ColumnDefinitions>
-
-                                <Grid Grid.Column="0" >
-                                    <Label Content="Local Address :" HorizontalAlignment="Right"  FontSize="24" Height="100" Width="200" HorizontalContentAlignment="Right" VerticalContentAlignment="Top"/>
-                                </Grid>
-
-                                <Grid Grid.Column="1"  HorizontalAlignment="Left">
-                                    <TextBox  FontSize="20" Height="100" Text="{Binding LocAddress,Mode=TwoWay}" Width="320" AcceptsReturn="True" TextWrapping="Wrap"  Margin="7 0 0 0" HorizontalContentAlignment="Left" VerticalContentAlignment="Top" AllowDrop="True"/>
-
-
-                                </Grid>
                             </Grid>
 
                             <Grid>
@@ -142,7 +146,9 @@
                             </Grid>
 
                             <Grid>
-                                <UC:UserControl1 lblContent="Name :" txtContent="{Binding NomName,Mode=TwoWay}"/>
+                                <UC:UserControl1 lblContent="Name :" IsFocused="{Binding FocNomName}" Read="{Binding ReadNomName}"
+                                                 EnterKeyCommand="{Binding EntNomName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                                 txtContent="{Binding NomName,Mode=TwoWay}"/>
                             </Grid>
 
                             <Grid>
@@ -152,58 +158,46 @@
                                 </Grid.ColumnDefinitions>
 
                                 <Grid Grid.Column="0">
-                                    <Label Content="D.O.B :" HorizontalAlignment="Right" Margin="5" FontSize="25" Height="70" Width="160" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" VerticalAlignment="Center"/>
+                                    <Label Content="D.O.B :" HorizontalAlignment="Right" Margin="5" FontSize="25" Height="70" Width="160" 
+                                           HorizontalContentAlignment="Right" VerticalContentAlignment="Center" VerticalAlignment="Center"/>
                                 </Grid>
 
                                 <Grid Grid.Column="1">
-                                    <DatePicker SelectedDate="{Binding NomDob,Mode=TwoWay}" FontSize="20" Height="60" Width="320" Margin="0 8 8 8" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+                                    <DatePicker SelectedDate="{Binding NomDob,Mode=TwoWay}" IsEnabled="{Binding ReadNomDob}"
+                                                local:FocusExtension.IsFocused="{Binding FocNomDob}" FontSize="20" 
+                                                Height="60" Width="320" Margin="0 8 8 8" HorizontalContentAlignment="Center" 
+                                                VerticalContentAlignment="Center"/>
                                 </Grid>
 
 
                             </Grid>
                             <Grid >
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="1*"/>
-                                    <ColumnDefinition Width="2*"/>
-                                </Grid.ColumnDefinitions>
 
-                                <Grid Grid.Column="0">
-                                    <Label Content="Relation :" HorizontalAlignment="Right" Margin="5" FontSize="25" Height="70" Width="160" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" VerticalAlignment="Center"/>
-                                </Grid>
-
-                                <Grid Grid.Column="1">
-                                    <ComboBox Height="60" SelectedItem="{Binding NomRel,Mode=TwoWay}" FontSize="25" Width="320" Margin="0 8 8 8" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
-                                        <ComboBoxItem Content="Father"/>
-                                        <ComboBoxItem Content="Mother"/>
-                                        <ComboBoxItem Content="Brother"/>
-                                        <ComboBoxItem Content="Sister"/>
-                                        <ComboBoxItem Content="Son"/>
-                                        <ComboBoxItem Content="Daughter"/>
-                                        <ComboBoxItem Content="Gardian"/>
-                                    </ComboBox>
-                                </Grid>
+                                <UC:UserControl1 lblContent="Relation :" 
+                                                 IsFocused="{Binding FocNomRel,Mode=TwoWay}" 
+                                                 Read="{Binding ReadNomRel,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                                 EnterKeyCommand="{Binding EntNomRel}"  
+                                                 txtContent="{Binding NomRel,Mode=TwoWay}"
+                                                 />
                             </Grid>
 
                             <Grid>
-                                <UC:UserControl1 lblContent="Phone No:" txtContent="{Binding NomPhoneNum,Mode=TwoWay}"/>
+                                <UC:UserControl1 lblContent="Phone No:" 
+                                                 IsFocused="{Binding FocNomPhoneNum,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
+                                                 Read="{Binding ReadNomPhoneNum,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                                 EnterKeyCommand="{Binding EntNomPhoneNum,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                                 txtContent="{Binding NomPhoneNum,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
                             </Grid>
 
                             <Grid >
 
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="1.2*"/>
-                                    <ColumnDefinition Width="2.4*"/>
-                                </Grid.ColumnDefinitions>
-
-                                <Grid Grid.Column="0" >
-                                    <Label Content="Address :" HorizontalAlignment="Right"  FontSize="24" Height="100" Width="200" HorizontalContentAlignment="Right" VerticalContentAlignment="Top"/>
-                                </Grid>
-
-                                <Grid Grid.Column="1"  HorizontalAlignment="Left">
-                                    <TextBox  FontSize="20" Height="100" Width="320" Text="{Binding NomAddress,Mode=TwoWay}" AcceptsReturn="True" TextWrapping="Wrap"  Margin="7 0 0 0" HorizontalContentAlignment="Left" VerticalContentAlignment="Top" AllowDrop="True"/>
+                                <UC:UC_Address lblContent="Address :" Readonly="{Binding ReadNomAddress,Mode=TwoWay}" txt_content="{Binding NomAddress,Mode=TwoWay}"  EnterTxt="{Binding EnterNomAddress,Mode=TwoWay}"  IsFocusedpr="{Binding FocNomAddress,Mode=TwoWay}"/>
+                                
+                                
+                                
 
 
-                                </Grid>
+                                
                             </Grid>
                         </StackPanel>
                     </StackPanel>
@@ -223,6 +217,10 @@
                 </StackPanel>
                 <StackPanel Margin="10">
                     <Button Content="Reset" Height="70" Width="200" FontSize="30" FontWeight="Bold" Background="White" Command="{Binding Reset,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" BorderBrush="Black"  BorderThickness="2"/>
+                </StackPanel>
+
+                <StackPanel Margin="10">
+                    <Button Content="Fetch" Height="70" Width="200" FontSize="30" FontWeight="Bold" Background="White" Command="{Binding Fetch,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" BorderBrush="Black"  BorderThickness="2"/>
                 </StackPanel>
             </StackPanel>
         </Grid>
